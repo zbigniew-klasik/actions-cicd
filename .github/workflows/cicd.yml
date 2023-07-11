@@ -17,6 +17,12 @@ jobs:
               run: |
                 ls ${{ github.workspace }}
             - run: echo "🍏 This job's status is ${{ job.status }}."
+            - name: 'Upload Artifact'
+              uses: actions/upload-artifact@v3
+              with:
+                name: my-artifact
+                path: README.md
+                retention-days: 3
     deployment-to-test:
         runs-on: windows-2022
         environment: test
@@ -24,6 +30,10 @@ jobs:
         needs: build-and-test
         steps:
             - run: echo "Test Deployment"
+            - name: Download a single artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: my-artifact
     deployment-to-prod:
         needs: deployment-to-test
         runs-on: windows-2022
@@ -31,3 +41,7 @@ jobs:
         name: Deployment to Prod
         steps:
             - run: echo "Test Deployment"
+            - name: Download a single artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: my-artifact
