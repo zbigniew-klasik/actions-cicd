@@ -2,8 +2,9 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-    Explore-GitHub-Actions:
+    build-and-test:
         runs-on: ubuntu-latest
+        name: Build and Test
         steps:
             - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
             - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -20,9 +21,11 @@ jobs:
         runs-on: ubuntu-latest
         environment: test
         name: Deployment to Test
+        needs: build-and-test
         steps:
             - run: echo "Test Deployment"
     deployment-to-prod:
+        needs: deployment-to-test
         runs-on: ubuntu-latest
         environment: prod
         name: Deployment to Prod
